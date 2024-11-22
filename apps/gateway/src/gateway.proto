@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gateway;
+
+service GatewayService {
+  rpc GetUser (GetUserById) returns (GetUserResponse);
+  rpc CreateUser (CreateUser) returns (GetUserResponse);
+}
+
+message GetUserById {
+  string id = 1;
+}
+
+message CreateUser {
+  string login = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message GetUserResponse {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+}
