@@ -24,3 +24,6 @@ export class GatewayController {
     return this.gatewayService.gatewaySort(path);
   }
 }
+
+// protoc   --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto)   --ts_proto_out=apps/common/proto-ts-files   --ts_proto_opt=nestJs=true  --proto_path=apps/common/proto-files   apps/common/proto-files/*.proto
+// command to creating proto files ts
