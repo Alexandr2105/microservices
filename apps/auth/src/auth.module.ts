@@ -16,17 +16,8 @@ import { JwtService } from '@nestjs/jwt';
         name: 'USER_SERVICE',
         transport: Transport.GRPC,
         options: {
-          package: ['user'],
-          protoPath: path.join(__dirname, '..', 'users/user.proto'),
-          url: 'localhost:3002',
-        },
-      },
-      {
-        name: 'AUTH_SERVICE',
-        transport: Transport.GRPC,
-        options: {
-          package: ['user'],
-          protoPath: path.join(__dirname, '..', 'users/user.proto'),
+          package: 'user',
+          protoPath: path.join(__dirname, 'user.proto'),
           url: 'localhost:3002',
         },
       },

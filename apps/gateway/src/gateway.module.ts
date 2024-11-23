@@ -12,7 +12,7 @@ import * as path from 'path';
         transport: Transport.GRPC,
         options: {
           package: 'auth',
-          protoPath: path.join(__dirname, '..', 'auth/auth.proto'),
+          protoPath: path.join(__dirname, 'auth.proto'),
           url: 'localhost:3001',
         },
       },

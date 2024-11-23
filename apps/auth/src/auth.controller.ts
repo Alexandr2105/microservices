@@ -4,6 +4,9 @@ import { LocalAuthGuard } from './guards/local.auth.guard';
 import { CreateUserDto } from './dto/create.user.dto';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from './services/auth.service';
+import { GrpcMethod } from '@nestjs/microservices';
+import { CreateUser } from '../../common/proto-ts-files/auth';
+import { GetUserResponse } from '../../common/proto-ts-files/user';
 
 @Controller('auth')
 export class AuthController {
@@ -17,8 +20,12 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async loginUser(@Body() body: LoginDto, @CurrentUser() user: string) {
-    console.log(user);
     // return this.authService.createAccess(c)
+  }
+
+  @GrpcMethod('AuthService', 'CreateNewUser')
+  async createNewUser(body: CreateUser): Promise<GetUserResponse> {
+    return this.authService.createNewUser(body);
   }
 
   // @Post('logout')

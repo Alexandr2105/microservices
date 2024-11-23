@@ -1,18 +1,15 @@
 import { All, Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { GatewayService } from './services/gateway.service';
-import { PathDecorator } from './decorators/path.decorator';
 import { CreateUserDto } from '../../auth/src/dto/create.user.dto';
-import { Observable } from 'rxjs';
-import { IGetUserResponseInterface } from '../../auth/src/interfaces/get.user.response.interface';
+import { GetUserResponse } from '../../common/proto-ts-files/auth';
+import { PathDecorator } from './decorators/path.decorator';
 
 @Controller()
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
   @Post('signup')
-  async getHello(
-    @Body() body: CreateUserDto,
-  ): Promise<Observable<IGetUserResponseInterface>> {
+  async getHello(@Body() body: CreateUserDto): Promise<GetUserResponse> {
     return this.gatewayService.createUser(body);
   }
 

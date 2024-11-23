@@ -1,26 +1,17 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/microservices/src",
+  "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/microservices/tsconfig.app.json",
-    "assets": ["**/*.proto"],
+    "tsConfigPath": "apps/gateway/tsconfig.app.json",
+    "assets": ["../../common/**/*.proto"],
     "watchAssets": true
   },
   "monorepo": true,
-  "root": "apps/microservices",
+  "root": "apps/gateway",
   "projects": {
-    "microservices": {
-      "type": "application",
-      "root": "apps/microservices",
-      "entryFile": "main",
-      "sourceRoot": "apps/microservices/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/microservices/tsconfig.app.json"
-      }
-    },
     "gateway": {
       "type": "application",
       "root": "apps/gateway",
