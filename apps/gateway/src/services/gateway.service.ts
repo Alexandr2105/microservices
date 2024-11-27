@@ -6,24 +6,30 @@ import {
   CreateUser,
   GetUserResponse,
 } from '../../../common/proto-ts-files/auth';
+import { RoutesMapConst } from '../const/routes.map.const';
 
 @Injectable()
 export class GatewayService {
   private authService: AuthServiceClient;
 
-  constructor(@Inject('AUTH_SERVICE') private readonly client: ClientGrpc) {}
+  constructor(
+    @Inject('AUTH_SERVICE') private readonly authClient: ClientGrpc,
+  ) {}
 
   onModuleInit() {
-    this.authService = this.client.getService<AuthServiceClient>('AuthService');
+    this.authService =
+      this.authClient.getService<AuthServiceClient>('AuthService');
   }
 
   async createUser(body: CreateUser): Promise<GetUserResponse> {
     return lastValueFrom(this.authService.createNewUser(body));
   }
 
-  async gatewaySort(path: string): Promise<string> {
+  async gatewaySort(path: string, body: any): Promise<any> {
     if (path.startsWith('/auth/')) {
-      return path;
+      console.log(path);
+      console.log(RoutesMapConst[path]);
+      return await this.createUser(body);
     } else if (path.startsWith('/users/')) {
       return 'users';
     } else if (path.startsWith('/products/')) {

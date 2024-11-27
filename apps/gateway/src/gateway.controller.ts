@@ -20,8 +20,11 @@ export class GatewayController {
 
   @UseGuards()
   @All('*')
-  async sortEndpoints(@PathDecorator() path: string): Promise<string> {
-    return this.gatewayService.gatewaySort(path);
+  async sortEndpoints(
+    @PathDecorator() path: string,
+    @Body() body: any,
+  ): Promise<string> {
+    return this.gatewayService.gatewaySort(path, body);
   }
 }
 
