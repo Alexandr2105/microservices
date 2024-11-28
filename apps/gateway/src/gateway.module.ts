@@ -3,6 +3,9 @@ import { GatewayController } from './gateway.controller';
 import { GatewayService } from './services/gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import * as path from 'path';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { BcryptService } from '../../common/bcrypt.service';
 
 @Module({
   imports: [
@@ -19,6 +22,6 @@ import * as path from 'path';
     ]),
   ],
   controllers: [GatewayController],
-  providers: [GatewayService],
+  providers: [GatewayService, LocalStrategy, JwtStrategy, BcryptService],
 })
 export class GatewayModule {}

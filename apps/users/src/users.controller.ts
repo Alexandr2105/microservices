@@ -3,9 +3,12 @@ import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
 import { UserInterface } from './interfaces/user.interface';
 import { GrpcMethod } from '@nestjs/microservices';
-import { GetUserById } from './dto/get.user.by.id';
 import { Observable } from 'rxjs';
-import { GetUserResponse } from '../../common/proto-ts-files/user';
+import {
+  UserEmail,
+  UserId,
+  UserResponse,
+} from '../../common/proto-ts-files/user';
 
 @Controller()
 export class UsersController {
@@ -14,9 +17,14 @@ export class UsersController {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  // @GrpcMethod('UserService', 'GetUser')
-  async getUser(data: GetUserById) {
+  @GrpcMethod('UserService', 'GetUserById')
+  async getUserById(data: UserId) {
     return this.usersRepository.getUserById(data.id);
+  }
+
+  @GrpcMethod('UserService', 'GetUserByEmail')
+  async getUserByEmail(data: UserEmail) {
+    return this.usersRepository.getUserByEmail(data.email);
   }
 
   // async getUser(data: GetUser): Promise<UserModel> {
@@ -26,7 +34,7 @@ export class UsersController {
   @GrpcMethod('UserService', 'CreateNewUser')
   async createUser(
     body: UserInterface,
-  ): Promise<Observable<GetUserResponse> | GetUserResponse> {
+  ): Promise<Observable<UserResponse> | UserResponse> {
     return this.usersRepository.createUser(body);
   }
 }

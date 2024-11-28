@@ -2,11 +2,12 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import {
+  AccessTokenResponse,
   AuthServiceClient,
-  CreateUser,
-  GetUserResponse,
+  UserId,
 } from '../../../common/proto-ts-files/auth';
 import { RoutesMapConst } from '../const/routes.map.const';
+import { CreateUser } from '../../../common/proto-ts-files/user';
 
 @Injectable()
 export class GatewayService {
@@ -21,8 +22,12 @@ export class GatewayService {
       this.authClient.getService<AuthServiceClient>('AuthService');
   }
 
-  async createUser(body: CreateUser): Promise<GetUserResponse> {
-    return lastValueFrom(this.authService.createNewUser(body));
+  async createUser(body: CreateUser): Promise<AccessTokenResponse> {
+    return lastValueFrom(this.authService.registration(body));
+  }
+
+  async login(body: UserId): Promise<AccessTokenResponse> {
+    return lastValueFrom(this.authService.login(body));
   }
 
   async gatewaySort(path: string, body: any): Promise<any> {

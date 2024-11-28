@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import process from 'node:process';
+import { config } from 'dotenv';
+import { AccessTokenResponse } from '../../../common/proto-ts-files/auth';
+
+config();
 
 @Injectable()
 export class Jwt {
   constructor(private jwt: JwtService) {}
 
-  async creatJWT(id: string): Promise<{ accessToken: string }> {
+  async creatJWT(id: string): Promise<AccessTokenResponse> {
     return {
       accessToken: this.jwt.sign(
         { userId: id },

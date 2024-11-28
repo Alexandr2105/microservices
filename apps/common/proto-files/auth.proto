@@ -3,22 +3,39 @@ syntax = "proto3";
 package auth;
 
 service AuthService {
-  rpc GetUser (GetUserById) returns (GetUserResponse);
-  rpc CreateNewUser (CreateUser) returns (GetUserResponse);
+  rpc GetUserById (UserId) returns (UserResponse);
+  rpc Registration (UserDto) returns (AccessTokenResponse);
+  rpc Login (UserId) returns (AccessTokenResponse);
+  rpc GetUserByEmail (UserEmail) returns (AllUserResponse);
 }
 
-message GetUserById {
+message UserId {
   string id = 1;
 }
 
-message CreateUser {
+message UserEmail {
+  string email = 1;
+}
+
+message UserDto {
   string login = 1;
   string email = 2;
   string password = 3;
 }
 
-message GetUserResponse {
+message UserResponse {
   string id = 1;
   string login = 2;
   string email = 3;
+}
+
+message AllUserResponse {
+  string id = 1;
+  string login = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message AccessTokenResponse {
+  string accessToken = 1;
 }

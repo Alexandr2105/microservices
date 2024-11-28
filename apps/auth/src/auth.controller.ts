@@ -1,31 +1,39 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { CurrentUser } from '../../users/src/decorators/current-user.decorator';
-import { LocalAuthGuard } from './guards/local.auth.guard';
+import { Body, Controller } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.user.dto';
-import { LoginDto } from './dto/login.dto';
 import { AuthService } from './services/auth.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import { CreateUser } from '../../common/proto-ts-files/auth';
-import { GetUserResponse } from '../../common/proto-ts-files/user';
+import { CreateUser } from '../../common/proto-ts-files/user';
+import {
+  AccessTokenResponse,
+  AllUserResponse,
+  UserId,
+  UserResponse,
+} from '../../common/proto-ts-files/auth';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('registration')
-  async registrationUsers(@Body() body: CreateUserDto): Promise<void> {
-    await this.authService.registrationUser(body);
+  @GrpcMethod('AuthService', 'Registration')
+  async registration(
+    @Body() body: CreateUserDto,
+  ): Promise<AccessTokenResponse> {
+    return this.authService.registrationUser(body);
   }
 
-  @UseGuards(LocalAuthGuard)
-  @Post('login')
-  async loginUser(@Body() body: LoginDto, @CurrentUser() user: string) {
-    // return this.authService.createAccess(c)
+  @GrpcMethod('AuthService', 'Login')
+  async loginUser(@Body() body: UserId): Promise<AccessTokenResponse> {
+    return this.authService.createAccess(body.id);
   }
 
   @GrpcMethod('AuthService', 'CreateNewUser')
-  async createNewUser(body: CreateUser): Promise<GetUserResponse> {
+  async createNewUser(body: CreateUser): Promise<UserResponse> {
     return this.authService.createNewUser(body);
+  }
+
+  @GrpcMethod('AuthService', 'GetUserByEmail')
+  async getUserByEmail(body: CreateUser): Promise<AllUserResponse> {
+    return this.authService.getUserByEmail(body);
   }
 
   // @Post('logout')

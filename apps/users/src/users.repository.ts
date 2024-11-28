@@ -17,4 +17,8 @@ export class UsersRepository {
   async createUser(body: UserInterface): Promise<UserModel> {
     return this.userRepository.create(body);
   }
+
+  async getUserByEmail(email: string): Promise<UserModel> {
+    return this.userRepository.findOne({ where: { email: email } });
+  }
 }
