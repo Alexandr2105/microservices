@@ -11,6 +11,7 @@ import { lastValueFrom } from 'rxjs';
 import {
   AccessTokenResponse,
   AllUserResponse,
+  UserId,
   UserResponse,
 } from '../../../common/proto-ts-files/auth';
 
@@ -48,5 +49,9 @@ export class AuthService {
 
   async getUserByEmail(body: CreateUser): Promise<AllUserResponse> {
     return lastValueFrom(this.userService.getUserByEmail(body));
+  }
+
+  async getUserById(body: UserId): Promise<UserResponse> {
+    return lastValueFrom(this.userService.getUserById(body));
   }
 }

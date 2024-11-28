@@ -36,6 +36,11 @@ export class AuthController {
     return this.authService.getUserByEmail(body);
   }
 
+  @GrpcMethod('AuthService', 'GetUserById')
+  async getUserById(body: UserId): Promise<UserResponse> {
+    return this.authService.getUserById(body);
+  }
+
   // @Post('logout')
   // @UseGuards(LocalAuthGuard)
   // async logout() {

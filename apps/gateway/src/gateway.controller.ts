@@ -6,6 +6,7 @@ import { PathDecorator } from './decorators/path.decorator';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { ResponseUserDto } from './dto/response.user.dto';
+import { JwtAuthGuard } from './guards/jwt.auth.guard';
 
 @Controller()
 export class GatewayController {
@@ -26,7 +27,7 @@ export class GatewayController {
     return this.gatewayService.login(user);
   }
 
-  @UseGuards()
+  @UseGuards(JwtAuthGuard)
   @All('*')
   async sortEndpoints(
     @PathDecorator() path: string,
