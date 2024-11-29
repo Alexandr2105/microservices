@@ -1,4 +1,4 @@
-import { All, Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { All, Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { GatewayService } from './services/gateway.service';
 import { CreateUserDto } from '../../auth/src/dto/create.user.dto';
 import { AccessTokenResponse } from '../../common/proto-ts-files/auth';
@@ -32,8 +32,9 @@ export class GatewayController {
   async sortEndpoints(
     @PathDecorator() path: string,
     @Body() body: any,
-  ): Promise<string> {
-    return this.gatewayService.gatewaySort(path, body);
+    @Req() req: Request,
+  ) {
+    return this.gatewayService.gatewaySort(path, body, req.method);
   }
 }
 

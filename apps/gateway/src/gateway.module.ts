@@ -19,6 +19,15 @@ import { BcryptService } from '../../common/bcrypt.service';
           url: 'localhost:3001',
         },
       },
+      {
+        name: 'PRODUCT_SERVICE',
+        transport: Transport.GRPC,
+        options: {
+          package: 'product',
+          protoPath: path.join(__dirname, 'product.proto'),
+          url: 'localhost:3004',
+        },
+      },
     ]),
   ],
   controllers: [GatewayController],

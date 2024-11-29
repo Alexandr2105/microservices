@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package order;
+
+service OrderService {
+  rpc CreateOrder (OrderInfo) returns (OrderResponse);
+  rpc GetOrderById (OrderId) returns (OrderResponse);
+  rpc UpdateOrder (UpdateOrderById) returns (EmptyResponse);
+  rpc DeleteOrder (OrderId) returns (EmptyResponse);
+}
+
+message OrderInfo {
+  string name = 1;
+  string description = 2;
+  int32 price = 3;
+  int32 quantity = 4;
+}
+
+message UpdateOrderById {
+  string name = 1;
+  string description = 2;
+  int32 price = 3;
+  int32 quantity = 4;
+  string id = 5;
+}
+
+message OrderId {
+  string id = 1;
+}
+
+message OrderResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string price = 4;
+  string quantity = 5;
+  string updatedAt = 6;
+  string createdAt = 7;
+}
+
+message EmptyResponse {}

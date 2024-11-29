@@ -6,20 +6,25 @@ import {
   AuthServiceClient,
   UserId,
 } from '../../../common/proto-ts-files/auth';
-import { RoutesMapConst } from '../const/routes.map.const';
 import { CreateUser } from '../../../common/proto-ts-files/user';
+import { product, productById } from '../const/routes.map.const';
+import { ProductServiceClient } from '../../../common/proto-ts-files/product';
 
 @Injectable()
 export class GatewayService {
   private authService: AuthServiceClient;
+  private productService: ProductServiceClient;
 
   constructor(
     @Inject('AUTH_SERVICE') private readonly authClient: ClientGrpc,
+    @Inject('PRODUCT_SERVICE') private readonly productClient: ClientGrpc,
   ) {}
 
   onModuleInit() {
     this.authService =
       this.authClient.getService<AuthServiceClient>('AuthService');
+    this.productService =
+      this.productClient.getService<ProductServiceClient>('ProductService');
   }
 
   async createUser(body: CreateUser): Promise<AccessTokenResponse> {
@@ -30,18 +35,25 @@ export class GatewayService {
     return lastValueFrom(this.authService.login(body));
   }
 
-  async gatewaySort(path: string, body: any): Promise<any> {
-    if (path.startsWith('/auth/')) {
-      console.log(path);
-      console.log(RoutesMapConst[path]);
-      return await this.createUser(body);
-    } else if (path.startsWith('/users/')) {
-      return 'users';
-    } else if (path.startsWith('/products/')) {
-      return 'products';
-    } else if (path.startsWith('/orders/')) {
-      return 'orders';
+  async gatewaySort(path: string, body: any, method: string): Promise<any> {
+    if (product.test(path) && method === 'POST') {
+      return lastValueFrom(this.productService.createProduct(body));
+    } else if (productById.test(path) && method === 'GET') {
+      const id = path.split('/')[2];
+      const info = await lastValueFrom(
+        this.productService.getProductById({ id: id }),
+      );
+      console.log(info);
+    } else if (productById.test(path) && method === 'PUT') {
+      const id = path.split('/')[2];
+      return lastValueFrom(
+        this.productService.updateProduct({ id: id, ...body }),
+      );
+    } else if (productById.test(path) && method === 'DELETE') {
+      const id = path.split('/')[2];
+      return lastValueFrom(this.productService.deleteProduct({ id: id }));
+    } else {
+      throw new NotFoundException('Invalid path');
     }
-    throw new NotFoundException('Invalid path');
   }
 }
