@@ -15,6 +15,11 @@ export interface OrderInfo {
   description: string;
   price: number;
   quantity: number;
+  userId: string;
+}
+
+export interface OrderList {
+  orders: OrderResponse[];
 }
 
 export interface UpdateOrderById {
@@ -33,10 +38,11 @@ export interface OrderResponse {
   id: string;
   name: string;
   description: string;
-  price: string;
-  quantity: string;
+  price: number;
+  quantity: number;
   updatedAt: string;
   createdAt: string;
+  userId: string;
 }
 
 export interface EmptyResponse {
@@ -45,28 +51,24 @@ export interface EmptyResponse {
 export const ORDER_PACKAGE_NAME = "order";
 
 export interface OrderServiceClient {
-  createOrder(request: OrderInfo): Observable<OrderResponse>;
+  buyProducts(request: OrderInfo): Observable<OrderResponse>;
 
   getOrderById(request: OrderId): Observable<OrderResponse>;
 
-  updateOrder(request: UpdateOrderById): Observable<EmptyResponse>;
-
-  deleteOrder(request: OrderId): Observable<EmptyResponse>;
+  getOrders(request: EmptyResponse): Observable<OrderList>;
 }
 
 export interface OrderServiceController {
-  createOrder(request: OrderInfo): Promise<OrderResponse> | Observable<OrderResponse> | OrderResponse;
+  buyProducts(request: OrderInfo): Promise<OrderResponse> | Observable<OrderResponse> | OrderResponse;
 
   getOrderById(request: OrderId): Promise<OrderResponse> | Observable<OrderResponse> | OrderResponse;
 
-  updateOrder(request: UpdateOrderById): Promise<EmptyResponse> | Observable<EmptyResponse> | EmptyResponse;
-
-  deleteOrder(request: OrderId): Promise<EmptyResponse> | Observable<EmptyResponse> | EmptyResponse;
+  getOrders(request: EmptyResponse): Promise<OrderList> | Observable<OrderList> | OrderList;
 }
 
 export function OrderServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createOrder", "getOrderById", "updateOrder", "deleteOrder"];
+    const grpcMethods: string[] = ["buyProducts", "getOrderById", "getOrders"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("OrderService", method)(constructor.prototype[method], method, descriptor);

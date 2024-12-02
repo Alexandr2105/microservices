@@ -13,7 +13,7 @@ export class ProductQueryRepository {
     return this.productTable.findOne({ where: { id: productId } });
   }
 
-  async getAllProductsByCategoryId(categoryId: string) {
-    // return this.productTable.findAll({ where: { categoryId: categoryId } });
+  async getAllProductsBy(): Promise<ProductTable[]> {
+    return this.productTable.findAll();
   }
 }

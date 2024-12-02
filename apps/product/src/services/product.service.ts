@@ -15,8 +15,8 @@ export class ProductService {
     private readonly productRepository: ProductRepository,
   ) {}
 
-  async getAllProductsForCategory(categoryId: string) {
-    return this.productQueryRepository.getAllProductsByCategoryId(categoryId);
+  async getAllProducts(): Promise<ProductTable[]> {
+    return this.productQueryRepository.getAllProductsBy();
   }
 
   async createProduct(body: ProductInfo): Promise<ProductTable> {

@@ -28,6 +28,15 @@ import { BcryptService } from '../../common/bcrypt.service';
           url: 'localhost:3004',
         },
       },
+      {
+        name: 'ORDER_SERVICE',
+        transport: Transport.GRPC,
+        options: {
+          package: 'order',
+          protoPath: path.join(__dirname, 'order.proto'),
+          url: 'localhost:3003',
+        },
+      },
     ]),
   ],
   controllers: [GatewayController],

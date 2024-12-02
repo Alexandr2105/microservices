@@ -3,10 +3,9 @@ syntax = "proto3";
 package order;
 
 service OrderService {
-  rpc CreateOrder (OrderInfo) returns (OrderResponse);
+  rpc BuyProducts (OrderInfo) returns (OrderResponse);
   rpc GetOrderById (OrderId) returns (OrderResponse);
-  rpc UpdateOrder (UpdateOrderById) returns (EmptyResponse);
-  rpc DeleteOrder (OrderId) returns (EmptyResponse);
+  rpc GetOrders (EmptyResponse) returns (OrderList);
 }
 
 message OrderInfo {
@@ -14,6 +13,11 @@ message OrderInfo {
   string description = 2;
   int32 price = 3;
   int32 quantity = 4;
+  string userId = 5;
+}
+
+message OrderList {
+  repeated OrderResponse orders = 1;
 }
 
 message UpdateOrderById {
@@ -32,10 +36,11 @@ message OrderResponse {
   string id = 1;
   string name = 2;
   string description = 3;
-  string price = 4;
-  string quantity = 5;
+  int32 price = 4;
+  int32 quantity = 5;
   string updatedAt = 6;
   string createdAt = 7;
+  string userId = 8;
 }
 
 message EmptyResponse {}

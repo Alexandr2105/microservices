@@ -12,10 +12,10 @@ import {
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  // async getAllProductsForCategory(
-  // ): Promise<ProductTable[]> {
-  //   return this.productService.getAllProductsForCategory();
-  // }
+  @GrpcMethod('ProductService', 'GetAllProducts')
+  async getAllProducts(): Promise<ProductTable[]> {
+    return this.productService.getAllProducts();
+  }
 
   @GrpcMethod('ProductService', 'CreateProduct')
   async createProduct(@Body() body: ProductInfo): Promise<ProductTable> {
@@ -24,7 +24,6 @@ export class ProductController {
 
   @GrpcMethod('ProductService', 'GetProductById')
   async getProductById(@Body() body: ProductId): Promise<ProductTable> {
-    console.log(body);
     return this.productService.getProduct(body);
   }
 

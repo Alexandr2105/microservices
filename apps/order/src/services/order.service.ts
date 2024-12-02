@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { OrderQueryRepository } from '../repositories/order.query.repository';
 import { OrderTable } from '../tables/order.table';
+import { OrderRepository } from '../repositories/order.repository';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly orderQueryRepository: OrderQueryRepository) {}
+  constructor(
+    private readonly orderQueryRepository: OrderQueryRepository,
+    private readonly orderRepository: OrderRepository,
+  ) {}
 
   async getOrders(
     startDate: Date,
@@ -22,37 +26,11 @@ export class OrderService {
     }
   }
 
-  async buyProducts(command: any): Promise<void> {
-    console.log(command);
-    // const cartInfo = await this.cartQueryRepository.getCartByUserId(
-    //   command.userId,
-    //   StatusTypeForCart.pending,
-    // );
-    // if (!cartInfo) {
-    //   throw new BadRequestException({
-    //     field: 'cart',
-    //     message: 'Такой корзины не существует',
-    //   });
-    // }
-    //
-    // cartInfo.status = StatusTypeForCart.finish;
-    // await this.cartRepository.saveCart(cartInfo, transaction);
-    //
-    // const newOrder = Order.build({
-    //   userId: cartInfo.userId,
-    // });
-    //
-    // await this.orderRepository.createOrder(newOrder, transaction);
-    //
-    // for (const cartItem of cartInfo.cartItems) {
-    //   const newOrderItem = OrderItem.build({
-    //     orderId: newOrder.id,
-    //     productId: cartItem.productId,
-    //     quantity: cartItem.quantity,
-    //     price: cartItem.product.price,
-    //   });
-    //
-    //   await this.orderRepository.createOrderItem(newOrderItem, transaction);
-    // }
+  async buyProducts(userId: string): Promise<OrderTable> {
+    const newOrder = OrderTable.build({
+      userId: userId,
+    });
+
+    return this.orderRepository.createOrder(newOrder);
   }
 }

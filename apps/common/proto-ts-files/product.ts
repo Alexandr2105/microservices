@@ -17,6 +17,10 @@ export interface ProductInfo {
   quantity: number;
 }
 
+export interface ProductList {
+  products: ProductInfo[];
+}
+
 export interface UpdateProductById {
   name: string;
   description: string;
@@ -50,7 +54,9 @@ export interface EmptyResponse {
 export const PRODUCT_PACKAGE_NAME = "product";
 
 export interface ProductServiceClient {
-  createProduct(request: ProductInfo): Observable<ProductResponse>;
+  getAllProducts(request: EmptyResponse): Observable<ProductList>;
+
+  buyProducts(request: ProductInfo): Observable<ProductResponse>;
 
   getProductById(request: ProductId): Observable<GetProductByIdResponse>;
 
@@ -60,7 +66,9 @@ export interface ProductServiceClient {
 }
 
 export interface ProductServiceController {
-  createProduct(request: ProductInfo): Promise<ProductResponse> | Observable<ProductResponse> | ProductResponse;
+  getAllProducts(request: EmptyResponse): Promise<ProductList> | Observable<ProductList> | ProductList;
+
+  buyProducts(request: ProductInfo): Promise<ProductResponse> | Observable<ProductResponse> | ProductResponse;
 
   getProductById(
     request: ProductId,
@@ -73,7 +81,7 @@ export interface ProductServiceController {
 
 export function ProductServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createProduct", "getProductById", "updateProduct", "deleteProduct"];
+    const grpcMethods: string[] = ["getAllProducts", "buyProducts", "getProductById", "updateProduct", "deleteProduct"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("ProductService", method)(constructor.prototype[method], method, descriptor);
